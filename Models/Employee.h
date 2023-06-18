@@ -46,8 +46,6 @@ public:
     static inline void addNewEmployee(Employee* employee){
         staff.push_back(std::shared_ptr<Employee>(employee));
     }
-
-
     static void saveStaffToJson() {
         json jStaff;
         std::string filename = "staff.json";
