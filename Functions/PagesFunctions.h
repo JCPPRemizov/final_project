@@ -8,6 +8,7 @@
 
 #include <memory>
 #include <iostream>
+#include <thread>
 #include "Employee.h"
 #include "HashPassword.h"
 
@@ -40,6 +41,8 @@ public:
             }
         }
         Employee::addNewEmployee(employee);
+        std::thread saveStaffThread([](){Employee::saveStaffToJson();});
+        saveStaffThread.join();
         Employee::saveStaffToJson();
         std::cout << "Новая учетная запись создана!" << std::endl;
     }
