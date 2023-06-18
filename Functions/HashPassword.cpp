@@ -1,11 +1,7 @@
 #include "HashPassword.h"
 
-size_t hashPassword(const std::string& password) {
-    std::hash<std::string> hasher;
-
-    size_t hash = hasher(password);
-
-    return hash;
+size_t hash(const std::string& password) {
+    return std::hash<std::string>()(password);;
 }
 
 

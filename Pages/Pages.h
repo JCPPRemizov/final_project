@@ -4,8 +4,9 @@
 #include <vector>
 #include "PagesFunctions.h"
     class Pages{
+    private:
+        static inline bool isAdminExist;
     public:
-        static inline bool adminEx;
         static inline void adminPage(){
             while (true) {
                 system("clear");
@@ -30,34 +31,7 @@
                 }
             }
         }
-        static inline void authorizationPage() {
-            while (true) {
-                system("clear");
-                std::string login, password;
-                std::cin.clear();
-                std::cin.ignore(10000, '\n');
-                std::cout << "Введите логин: " << std::endl;
-                std::cin.clear();
-                std::cin >> login;
-                std::cout << "Введите пароль: " << std::endl;
-                std::cin >> password;
-                std::shared_ptr<Employee> employee = PagesFunctions::authorization(login, password);
-                if (employee == nullptr){
-                    std::cout << "Неверный логин или пароль!" << std::endl;
-                    std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
-                    std::cin.clear();
-                    std::cin.ignore(10000, '\n');
-                    getchar();
-                    break;
-                }
-                switch (employee->employeeType) {
-                    case ADMIN:
-                        adminPage();
-                }
-                break;
 
-            }
-        }
         static inline void adminRegPage(){
             while (true) {
                 system("clear");
@@ -76,84 +50,11 @@
                 std::cin >> middle_name;
                 PagesFunctions::registration(EmployeeType(ADMIN), name, surname, middle_name, login, password);
                 std::cout << "Успешная регистрация!" << std::endl;
-                adminEx = true;
+                isAdminExist = true;
                 break;
             }
         }
-        static inline void startPage() {
-            int action;
-            Employee::loadStaffFromJson();
-            if (Employee::staff.size() != 0){
-                for (auto item:Employee::staff){
-                    if (item->employeeType == EmployeeType(ADMIN)){
-                        adminEx = true;
-                    }
-                }
-            }
-            while (true) {
-                system("clear");
-                if (!adminEx){
-                    std::cout << "Добро пожаловать!\n" << "Доступные действия:\n"
-                              << "1.Авторизация\n2.Регистрация админа\n3.Войти как гость\nВыберите действие: " << std::endl;
-                }
-                else {
-                    std::cout << "Добро пожаловать!\n" << "Доступные действия:\n"
-                              << "1.Авторизация\n2.Войти как гость\nВыберите действие: " << std::endl;
-                }
-                std::cin >> action;
-                if (std::cin.fail()) {
-                    std::cin.clear();
-                    std::cin.ignore(10000, '\n');
-                    std::cout << "Неверный ввод!" << std::endl;
-                    std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
-                    std::cin.clear();
-                    std::cin.ignore(10000, '\n');
-                    getchar();
-                    continue;
-                } else {
-                    if (!adminEx){
-                        if (action < 1 or action > 3){
-                            std::cout << "Введите число в диапазоне от 1 до 3!" << std::endl;
-                            std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
-                            std::cin.clear();
-                            std::cin.ignore(10000, '\n');
-                            getchar();
-                            continue;
-                        }
-                        else{
-                            switch (action) {
-                                case 1:
-                                    authorizationPage();
-                                    break;
-                                case 2:
-                                    adminRegPage();
-                                    break;
-                            }
-                        }
-                    }
-                    else{
-                        if (action < 1 or action > 2){
-                            std::cout << "Введите число в диапазоне от 1 до 2!" << std::endl;
-                            std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
-                            std::cin.clear();
-                            std::cin.ignore(10000, '\n');
-                            getchar();
-                            continue;
-                        }
-                        else{
-                            switch (action) {
-                                case 1:
-                                    authorizationPage();
-                                    break;
-                                case 2:
-                                    std::cout << "Два" << std::endl;
-                                    break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+
         static inline void newUserRegistrationPage(){
             std::string login, password, name, surname, middle_name;
             EmployeeType type;
@@ -215,6 +116,7 @@
             }
 
         }
+
         static inline void userRefactorPage(){
             while (true) {
                 std::string name, surname, middle_name, login, password;
@@ -283,6 +185,111 @@
                 PagesFunctions::editEmployee(userNum, action, name, surname, middle_name, login, password);
             }
         }
+
+        static inline void authorizationPage() {
+            while (true) {
+                system("clear");
+                std::string login, password;
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                std::cout << "Введите логин: " << std::endl;
+                std::cin.clear();
+                std::cin >> login;
+                std::cout << "Введите пароль: " << std::endl;
+                std::cin >> password;
+                std::shared_ptr<Employee> employee = PagesFunctions::authorization(login, password);
+                if (employee == nullptr){
+                    std::cout << "Неверный логин или пароль!" << std::endl;
+                    std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                    std::cin.clear();
+                    std::cin.ignore(10000, '\n');
+                    getchar();
+                    break;
+                }
+                switch (employee->employeeType) {
+                    case ADMIN:
+                        adminPage();
+                }
+                break;
+
+            }
+        }
+
+        static inline void startPage() {
+            int action;
+            Employee::loadStaffFromJson();
+            if (Employee::staff.size() != 0){
+                for (auto item:Employee::staff){
+                    if (item->employeeType == EmployeeType(ADMIN)){
+                        isAdminExist = true;
+                    }
+                }
+            }
+            while (true) {
+                system("clear");
+                if (!isAdminExist){
+                    std::cout << "Добро пожаловать!\n" << "Доступные действия:\n"
+                              << "1.Авторизация\n2.Регистрация админа\n3.Войти как гость\nВыберите действие: " << std::endl;
+                }
+                else {
+                    std::cout << "Добро пожаловать!\n" << "Доступные действия:\n"
+                              << "1.Авторизация\n2.Войти как гость\nВыберите действие: " << std::endl;
+                }
+                std::cin >> action;
+                if (std::cin.fail()) {
+                    std::cin.clear();
+                    std::cin.ignore(10000, '\n');
+                    std::cout << "Неверный ввод!" << std::endl;
+                    std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                    std::cin.clear();
+                    std::cin.ignore(10000, '\n');
+                    getchar();
+                    continue;
+                } else {
+                    if (!isAdminExist){
+                        if (action < 1 or action > 3){
+                            std::cout << "Введите число в диапазоне от 1 до 3!" << std::endl;
+                            std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                            std::cin.clear();
+                            std::cin.ignore(10000, '\n');
+                            getchar();
+                            continue;
+                        }
+                        else{
+                            switch (action) {
+                                case 1:
+                                    authorizationPage();
+                                    break;
+                                case 2:
+                                    adminRegPage();
+                                    break;
+                            }
+                        }
+                    }
+                    else{
+                        if (action < 1 or action > 2){
+                            std::cout << "Введите число в диапазоне от 1 до 2!" << std::endl;
+                            std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                            std::cin.clear();
+                            std::cin.ignore(10000, '\n');
+                            getchar();
+                            continue;
+                        }
+                        else{
+                            switch (action) {
+                                case 1:
+                                    authorizationPage();
+                                    break;
+                                case 2:
+                                    std::cout << "Два" << std::endl;
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     };
 
 

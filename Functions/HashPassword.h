@@ -9,5 +9,5 @@
 #include <string>
 #include <cstring>
 #include <crypt.h>
-size_t hashPassword(const std::string& password);
+size_t hash(const std::string& password);
 #endif //FINAL_PROJECT_HASHPASSWORD_H

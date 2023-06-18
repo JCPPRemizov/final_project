@@ -15,7 +15,7 @@ class PagesFunctions {
 public:
     static inline std::shared_ptr<Employee> authorization(const std::string& login, const std::string& password){
 
-        size_t hashedPassword = hashPassword(password);
+        size_t hashedPassword = hash(password);
         std::shared_ptr<Employee> employee;
         for (auto item:Employee::staff){
             if (item->login == login and item->password == hashedPassword){
@@ -27,7 +27,7 @@ public:
 
     static inline void registration(EmployeeType employeeType, const std::string& name, const std::string& surname, const std::string& middle_name,
                       const std::string& login, const std::string& password){
-        size_t hasedPassword = hashPassword(password);
+        size_t hasedPassword = hash(password);
         auto* employee = new Employee(employeeType, name, surname, middle_name, login, hasedPassword);
         for (auto item:Employee::staff){
             if (item->login == employee->login){
@@ -72,7 +72,7 @@ public:
         employee->surname = surname;
         employee->middle_name = middle_name;
         employee->login = login;
-        employee->password = hashPassword(password);
+        employee->password = hash(password);
 
     }
 };
