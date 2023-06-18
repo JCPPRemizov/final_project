@@ -124,8 +124,10 @@
                             switch (action) {
                                 case 1:
                                     authorizationPage();
+                                    break;
                                 case 2:
                                     adminRegPage();
+                                    break;
                             }
                         }
                     }
@@ -142,8 +144,10 @@
                             switch (action) {
                                 case 1:
                                     authorizationPage();
+                                    break;
                                 case 2:
                                     std::cout << "Два" << std::endl;
+                                    break;
                             }
                         }
                     }
@@ -156,24 +160,27 @@
             while (true) {
                 system("clear");
                 std::cout << "Выберите тип учетной записи :" << std::endl;
-                std::cout << "1.Системный администратор\n2.Другие\n3.Выйти\nТип учетной записи: " << std::endl;
+                std::cout << "1.Системный администратор\n2.Складской менеджер\n3.Поставщик\n4.Бухгалтер\n5.Повар\n6.Официант\nТип учетной записи(Введите 0 для выхода): " << std::endl;
                 int action = 0;
                 std::cin >> action;
                 if (std::cin.fail()){
-                    std::cin.clear();
-                    std::cin.ignore(10000, '\n');
-                    continue;
-                }
-                if (action < 1 or action > 3){
-                    std::cout << "Число вне диапазона выбора" << std::endl;
+                    std::cout << "Ошибка ввода!" << std::endl;
                     std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
                     std::cin.clear();
                     std::cin.ignore(10000, '\n');
                     getchar();
                     continue;
                 }
-                if (action == 3){
+                if (action == 0){
                     break;
+                }
+                if (action < 1 or action > 6){
+                    std::cout << "Число вне диапазона выбора" << std::endl;
+                    std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                    std::cin.clear();
+                    std::cin.ignore(10000, '\n');
+                    getchar();
+                    continue;
                 }
                 std::cout << "Введите логин: " << std::endl;
                 std::cin >> login;
@@ -187,7 +194,22 @@
                 std::cin >> middle_name;
                 switch (action) {
                     case 1:
-                        type = EmployeeType(ADMIN);
+                        type = EmployeeType::ADMIN;
+                        break;
+                    case 2:
+                        type = EmployeeType::WAREHOUSE_MANAGER;
+                        break;
+                    case 3:
+                        type = EmployeeType::PROVIDER;
+                        break;
+                    case 4:
+                        type = EmployeeType::ACCOUNTANT;
+                        break;
+                    case 5:
+                        type = EmployeeType::COOK;
+                        break;
+                    case 6:
+                        type = EmployeeType::WAITER;
                 }
                 PagesFunctions::registration(type, name, surname, middle_name, login, password);
             }
@@ -195,44 +217,70 @@
         }
         static inline void userRefactorPage(){
             while (true) {
-                system("clear");
-                std::cin.clear();
-                std::cin.ignore(10000, '\n');
-                std::cout << "Выберите пользователя для редактирования (Введите 0 для выхода): " << std::endl;
+                std::string name, surname, middle_name, login, password;
+                int userNum = 0;
+                int action = 0;
                 int i = 0;
+
+                system("clear");
+
+                std::cout << "Выберите пользователя для редактирования (Введите 0 для выхода): " << std::endl;
+
                 for (auto item: Employee::staff) {
                     i++;
                     std::cout << i << ". " << "Имя: " << item->name << "\n" << "Фамилия: " << item->surname << "\n" << "Логин: " << item->login << "\n"
                               << "Должность: " << item->employeeType << "\nПользователь: " << std::endl;
                 }
-                int userNum = 0;
+
                 std::cin >> userNum;
+
                 if (std::cin.fail()){
                     std::cout << "Неверный ввод!" << std::endl;
+                    std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                    std::cin.clear();
+                    std::cin.ignore(10000, '\n');
+                    getchar();
                     continue;
                 }
+
                 if (userNum == 0){
                     break;
                 }
+
                 if (userNum > Employee::staff.size() or userNum < 0){
                     std::cout << "Такого пользователя нету" << std::endl;
+                    std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                    std::cin.clear();
+                    std::cin.ignore(10000, '\n');
+                    getchar();
                     continue;
                 }
-                std::shared_ptr<Employee> &employee = Employee::staff[userNum - 1];
+
+                std::cout << "Выберите тип учетной записи :" << std::endl;
+                std::cout << "1.Системный администратор\n2.Складской менеджер\n3.Поставщик\n4.Бухгалтер\n5.Повар\n6.Официант\nТип учетной записи(Введите 0 для выхода): " << std::endl;
+                std::cin >> action;
+
+                if (std::cin.fail()){
+                    std::cout << "Неверный ввод!" << std::endl;
+                    std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                    std::cin.clear();
+                    std::cin.ignore(10000, '\n');
+                    getchar();
+                    continue;
+                }
+
                 std::cout << "Введите логин: " << std::endl;
-                std::cin >> employee->login;
+                std::cin >> login;
                 std::cout << "Введите пароль: " << std::endl;
-                std::string password;
                 std::cin >> password;
                 std::cout << "Введите Имя: " << std::endl;
-                std::cin >> employee->name;
+                std::cin >> name;
                 std::cout << "Введите Фамилию: " << std::endl;
-                std::cin >> employee->surname;
+                std::cin >> surname;
                 std::cout << "Введите Отчество: " << std::endl;
-                std::cin >> employee->middle_name;
+                std::cin >> middle_name;
 
-                employee->password = hashPassword(password);
-
+                PagesFunctions::editEmployee(userNum, action, name, surname, middle_name, login, password);
             }
         }
     };

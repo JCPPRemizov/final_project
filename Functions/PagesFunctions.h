@@ -43,6 +43,38 @@ public:
         Employee::saveStaffToJson();
         std::cout << "Новая учетная запись создана!" << std::endl;
     }
+
+    static inline void editEmployee(const int& employeeId, const int& employeeType, const std::string& name, const std::string& surname, const std::string& middle_name,
+                                    const std::string& login, const std::string& password){
+        EmployeeType type;
+        std::shared_ptr<Employee> &employee = Employee::staff[employeeId - 1];
+        switch (employeeType) {
+            case 1:
+                type = EmployeeType::ADMIN;
+                break;
+            case 2:
+                type = EmployeeType::WAREHOUSE_MANAGER;
+                break;
+            case 3:
+                type = EmployeeType::PROVIDER;
+                break;
+            case 4:
+                type = EmployeeType::ACCOUNTANT;
+                break;
+            case 5:
+                type = EmployeeType::COOK;
+                break;
+            case 6:
+                type = EmployeeType::WAITER;
+        }
+        employee->employeeType = type;
+        employee->name = name;
+        employee->surname = surname;
+        employee->middle_name = middle_name;
+        employee->login = login;
+        employee->password = hashPassword(password);
+
+    }
 };
 
 

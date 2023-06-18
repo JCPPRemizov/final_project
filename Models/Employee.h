@@ -9,7 +9,7 @@
 #include <memory>
 #include <fstream>
 #include "EmployeeTypes.h"
-#include "../libs/json.hpp"
+#include "json.hpp"
 using json = nlohmann::json;
 class Employee {
 private:
@@ -43,9 +43,11 @@ public:
         this->login = std::move(login);
         this->password = password;
     };
+
     static inline void addNewEmployee(Employee* employee){
         staff.push_back(std::shared_ptr<Employee>(employee));
     }
+
     static void saveStaffToJson() {
         json jStaff;
         std::string filename = "staff.json";
@@ -63,6 +65,7 @@ public:
             std::cerr << "Ошибка записи в файл." << std::endl;
         }
     }
+
     static void loadStaffFromJson() {
         std::string filename = "staff.json";
         std::ifstream ifs(filename);
