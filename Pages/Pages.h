@@ -1,8 +1,17 @@
 #ifndef FINAL_PROJECT_PAGES_H
 #define FINAL_PROJECT_PAGES_H
+#define LINUX
 
 #include <vector>
 #include "EmployeeFunctions.h"
+#include "ProductFunctions.h"
+#ifdef LINUX
+static std::string consoleClear = "clear";
+#endif
+
+#ifdef WINDOWS
+static std::string consoleClear = "cls";
+#endif
 
 class Pages {
 private:
@@ -10,17 +19,19 @@ private:
 public:
     static void adminPage() {
         while (true) {
-            system("clear");
+            system(consoleClear.c_str());
             int action;
-            std::cin.clear();
-            std::cin.ignore(10000, '\n');
             std::cout << "Страница админа" << std::endl;
             std::cout
-                    << "1.Редактировать учетные записи\n2.Регистрация новой учетной записи\n3.Выход\nВыберите действие:"
+                    << "1.Редактировать учетные записи\n2.Регистрация новой учетной записи\n3.Список продуктов\n4.Добавление продукта\n5.Выход\nВыберите действие:"
                     << std::endl;
             std::cin >> action;
             if (std::cin.fail()) {
-                std::cout << "Неверный ввод!";
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                std::cout << "Ошибка! Введите число!";
+                std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                getchar();
                 continue;
             }
             if (action == 1) {
@@ -28,14 +39,25 @@ public:
             } else if (action == 2) {
                 newUserRegistrationPage();
             } else if (action == 3) {
+                productListPage();
+            } else if (action == 4){
+                productAddPage();
+            } else if (action == 5){
                 break;
+            } else {
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                std::cout << "Ошибка! Такого действия нету!" << std::endl;
+                std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                getchar();
+                continue;
             }
         }
     }
 
     static void adminRegPage() {
         while (true) {
-            system("clear");
+            system(consoleClear.c_str());
             std::string login, password, name, surname, middle_name;
             std::cin.clear();
             std::cin.ignore(10000, '\n');
@@ -59,8 +81,8 @@ public:
     static void newUserRegistrationPage() {
         std::string login, password, name, surname, middle_name;
         while (true) {
+            system(consoleClear.c_str());
             int action = 0;
-            system("clear");
             std::cout << "Выберите тип учетной записи :" << std::endl;
             std::cout
                     << "1.Системный администратор\n2.Складской менеджер\n3.Поставщик\n4.Бухгалтер\n5.Повар\n6.Официант\nТип учетной записи(Введите 0 для выхода): "
@@ -107,12 +129,13 @@ public:
 
     static void userRefactorPage() {
         while (true) {
+
+            system(consoleClear.c_str());
+
             std::string name, surname, middle_name, login, password;
             int userNum = 0;
             int action = 0;
             int i = 0;
-
-            system("clear");
 
             std::cout << "Выберите пользователя для редактирования (Введите 0 для выхода): " << std::endl;
 
@@ -180,7 +203,7 @@ public:
 
     static void authorizationPage() {
         while (true) {
-            system("clear");
+            system(consoleClear.c_str());
             std::string login, password;
             std::cin.clear();
             std::cin.ignore(10000, '\n');
@@ -223,7 +246,7 @@ public:
             }
         }
         while (true) {
-            system("clear");
+            system(consoleClear.c_str());
             if (!isAdminExist) {
                 std::cout << "Добро пожаловать!\n" << "Доступные действия:\n"
                           << "1.Авторизация\n2.Регистрация админа\n3.Войти как гость\nВыберите действие(Для выхода введите 0): " << std::endl;
@@ -289,6 +312,40 @@ public:
         std::cin.ignore();
         std::cin.ignore(10000, '\n');
         std::cin.get();
+    }
+
+    static void productAddPage(){
+        while (true){
+            system(consoleClear.c_str());
+            std::string name;
+            float cost;
+            std::cout << "Введите имя продукта: " << std::endl;
+            std::cin >> name;
+            std::cout << "Введите стоимость продукта: " << std::endl;
+            std::cin >> cost;
+            if (std::cin.fail()){
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                std::cout << "Ошибка! Введите число!" << std::endl;
+                std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                getchar();
+                continue;
+            }
+            ProductFunctions::addNewProduct(name, cost);
+            break;
+        }
+    }
+
+    static void productListPage(){
+        while(true){
+            system(consoleClear.c_str());
+            ProductFunctions::printProductList();
+            std::cout << "Нажмите любую клвишу для выхода" << std::endl;
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+            getchar();
+            break;
+        }
     }
 
 };
