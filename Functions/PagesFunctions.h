@@ -14,7 +14,7 @@
 
 class PagesFunctions {
 public:
-    static inline std::shared_ptr<Employee> authorization(const std::string& login, const std::string& password){
+    static std::shared_ptr<Employee> authorization(const std::string& login, const std::string& password){
 
         size_t hashedPassword = hash(password);
         std::shared_ptr<Employee> employee;
@@ -26,7 +26,7 @@ public:
         return employee;
     }
 
-    static inline void registration(EmployeeType employeeType, const std::string& name, const std::string& surname, const std::string& middle_name,
+    static void registration(EmployeeType employeeType, const std::string& name, const std::string& surname, const std::string& middle_name,
                       const std::string& login, const std::string& password){
         size_t hasedPassword = hash(password);
         auto* employee = new Employee(employeeType, name, surname, middle_name, login, hasedPassword);
@@ -47,7 +47,7 @@ public:
         std::cout << "Новая учетная запись создана!" << std::endl;
     }
 
-    static inline void editEmployee(const int& employeeId, const int& employeeType, const std::string& name, const std::string& surname, const std::string& middle_name,
+    static void editEmployee(const int& employeeId, const int& employeeType, const std::string& name, const std::string& surname, const std::string& middle_name,
                                     const std::string& login, const std::string& password){
         EmployeeType type;
         std::shared_ptr<Employee> &employee = Employee::staff[employeeId - 1];
@@ -77,6 +77,33 @@ public:
         employee->login = login;
         employee->password = hash(password);
 
+    }
+
+    static void addNewEmployee(const int& employeeType, const std::string& name, const std::string& surname, const std::string& middle_name,
+                               const std::string& login, const std::string& password){
+
+        EmployeeType type;
+
+        switch (employeeType) {
+            case 1:
+                type = EmployeeType::ADMIN;
+                break;
+            case 2:
+                type = EmployeeType::WAREHOUSE_MANAGER;
+                break;
+            case 3:
+                type = EmployeeType::PROVIDER;
+                break;
+            case 4:
+                type = EmployeeType::ACCOUNTANT;
+                break;
+            case 5:
+                type = EmployeeType::COOK;
+                break;
+            case 6:
+                type = EmployeeType::WAITER;
+        }
+        PagesFunctions::registration(type, name, surname, middle_name, login, password);
     }
 };
 

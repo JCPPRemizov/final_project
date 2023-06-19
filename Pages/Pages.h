@@ -8,7 +8,7 @@ class Pages {
 private:
     static inline bool isAdminExist;
 public:
-    static inline void adminPage() {
+    static void adminPage() {
         while (true) {
             system("clear");
             int action;
@@ -33,7 +33,7 @@ public:
         }
     }
 
-    static inline void adminRegPage() {
+    static void adminRegPage() {
         while (true) {
             system("clear");
             std::string login, password, name, surname, middle_name;
@@ -56,17 +56,17 @@ public:
         }
     }
 
-    static inline void newUserRegistrationPage() {
+    static void newUserRegistrationPage() {
         std::string login, password, name, surname, middle_name;
-        EmployeeType type;
         while (true) {
+            int action = 0;
             system("clear");
             std::cout << "Выберите тип учетной записи :" << std::endl;
             std::cout
                     << "1.Системный администратор\n2.Складской менеджер\n3.Поставщик\n4.Бухгалтер\n5.Повар\n6.Официант\nТип учетной записи(Введите 0 для выхода): "
                     << std::endl;
-            int action = 0;
             std::cin >> action;
+
             if (std::cin.fail()) {
                 std::cout << "Ошибка ввода!" << std::endl;
                 std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
@@ -75,10 +75,8 @@ public:
                 getchar();
                 continue;
             }
-            if (action == 0) {
-                break;
-            }
-            if (action < 1 or action > 6) {
+
+            if (action < 0 or action > 6) {
                 std::cout << "Число вне диапазона выбора" << std::endl;
                 std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
                 std::cin.clear();
@@ -86,6 +84,11 @@ public:
                 getchar();
                 continue;
             }
+
+            if (action == 0) {
+                break;
+            }
+
             std::cout << "Введите логин: " << std::endl;
             std::cin >> login;
             std::cout << "Введите пароль: " << std::endl;
@@ -96,31 +99,13 @@ public:
             std::cin >> surname;
             std::cout << "Введите Отчество: " << std::endl;
             std::cin >> middle_name;
-            switch (action) {
-                case 1:
-                    type = EmployeeType::ADMIN;
-                    break;
-                case 2:
-                    type = EmployeeType::WAREHOUSE_MANAGER;
-                    break;
-                case 3:
-                    type = EmployeeType::PROVIDER;
-                    break;
-                case 4:
-                    type = EmployeeType::ACCOUNTANT;
-                    break;
-                case 5:
-                    type = EmployeeType::COOK;
-                    break;
-                case 6:
-                    type = EmployeeType::WAITER;
-            }
-            PagesFunctions::registration(type, name, surname, middle_name, login, password);
+
+            PagesFunctions::addNewEmployee(action, name, surname, middle_name, login, password);
         }
 
     }
 
-    static inline void userRefactorPage() {
+    static void userRefactorPage() {
         while (true) {
             std::string name, surname, middle_name, login, password;
             int userNum = 0;
@@ -131,7 +116,7 @@ public:
 
             std::cout << "Выберите пользователя для редактирования (Введите 0 для выхода): " << std::endl;
 
-            for (auto item: Employee::staff) {
+            for (const auto& item: Employee::staff) {
                 i++;
                 std::cout << i << ". " << "Имя: " << item->name << "\n" << "Фамилия: " << item->surname << "\n"
                           << "Логин: " << item->login << "\n"
@@ -141,16 +126,12 @@ public:
             std::cin >> userNum;
 
             if (std::cin.fail()) {
-                std::cout << "Неверный ввод!" << std::endl;
+                std::cout << "Введите число!" << std::endl;
                 std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
                 getchar();
                 continue;
-            }
-
-            if (userNum == 0) {
-                break;
             }
 
             if (userNum > Employee::staff.size() or userNum < 0) {
@@ -162,14 +143,19 @@ public:
                 continue;
             }
 
+            if (userNum == 0) {
+                break;
+            }
+
             std::cout << "Выберите тип учетной записи :" << std::endl;
             std::cout
                     << "1.Системный администратор\n2.Складской менеджер\n3.Поставщик\n4.Бухгалтер\n5.Повар\n6.Официант\nТип учетной записи(Введите 0 для выхода): "
                     << std::endl;
+
             std::cin >> action;
 
             if (std::cin.fail()) {
-                std::cout << "Неверный ввод!" << std::endl;
+                std::cout << "Введите число!" << std::endl;
                 std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
@@ -192,7 +178,7 @@ public:
         }
     }
 
-    static inline void authorizationPage() {
+    static void authorizationPage() {
         while (true) {
             system("clear");
             std::string login, password;
@@ -225,12 +211,12 @@ public:
         }
     }
 
-    static inline void startPage() {
+    static void startPage() {
         int action;
         std::thread loadStaffThread([]() { Employee::loadStaffFromJson(); });
         loadStaffThread.join();
-        if (Employee::staff.size() != 0) {
-            for (auto item: Employee::staff) {
+        if (!Employee::staff.empty()) {
+            for (const auto& item: Employee::staff) {
                 if (item->employeeType == EmployeeType(ADMIN)) {
                     isAdminExist = true;
                 }
@@ -247,7 +233,7 @@ public:
             }
             std::cin >> action;
             if (std::cin.fail()) {
-                std::cout << "Неверный ввод!" << std::endl;
+                std::cout << "Введите число!" << std::endl;
                 std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
@@ -298,7 +284,7 @@ public:
         }
     }
 
-    static inline void warehousePage() {
+    static void warehousePage() {
         std::cout << "Страница складского менеджера" << std::endl;
         std::cin.ignore();
         std::cin.ignore(10000, '\n');
