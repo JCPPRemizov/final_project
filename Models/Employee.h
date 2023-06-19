@@ -68,19 +68,24 @@ public:
     }
 
     static void loadStaffFromJson() {
-        std::string filename = "staff.json";
-        std::ifstream ifs(filename);
-        if (ifs.is_open()) {
-            json jLoadedStaff;
-            ifs >> jLoadedStaff;
+        try {
+            std::string filename = "staff.json";
+            std::ifstream ifs(filename);
+            if (ifs.is_open()) {
+                json jLoadedStaff;
+                ifs >> jLoadedStaff;
 
-            for (const auto& j : jLoadedStaff) {
-                staff.push_back(Employee::fromJson(j));
+                for (const auto &j: jLoadedStaff) {
+                    staff.push_back(Employee::fromJson(j));
+                }
+
+                ifs.close();
+            } else {
+                std::cerr << "Ошибка чтения файла." << std::endl;
             }
+        }
+        catch (std::exception ex){
 
-            ifs.close();
-        } else {
-            std::cerr << "Ошибка чтения файла." << std::endl;
         }
     }
 };

@@ -26,7 +26,7 @@ public:
             std::cout << "Страница админа" << std::endl;
             std::cout
                     << "1.Редактировать учетные записи\n2.Регистрация новой учетной записи\n3.Удаление пользователя\n4.Список продуктов\n5.Добавление продукта"
-                       "\n6.Редактирование продуктов\n7.Удаление продуктов\n8.Добавление товара в меню\n9.Редактирование товара в меню\n10.Просмотр пунктов меню\nВыберите действие(Введите 0 для выхода):"
+                       "\n6.Редактирование продуктов\n7.Удаление продуктов\n8.Добавление товара в меню\n9.Редактирование товара в меню\n10.Удаление товара из меню\n11.Просмотр пунктов меню\nВыберите действие(Введите 0 для выхода):"
                     << std::endl;
             std::cin >> action;
             if (std::cin.fail()) {
@@ -57,7 +57,9 @@ public:
                 menuAddPage();
             } else if (action == 9){
                 menuEditPage();
-            } else if (action == 10) {
+            } else if (action == 10){
+                menuDeletePage();
+            } else if (action == 11) {
                 menuPrintPage();
             } else {
                 std::cin.clear();
@@ -298,6 +300,7 @@ public:
         int action;
         EmployeeFunctions::loadEmployee();
         ProductFunctions::loadProduct();
+        MenuFunctions::loadMenuItems();
         if (!Employee::staff.empty()) {
             for (const auto &item: Employee::staff) {
                 if (item->employeeType == EmployeeType(ADMIN)) {
@@ -635,7 +638,7 @@ public:
             }
             if (!productToMenu.empty()) {
 
-                MenuFunctions::addNewMenu(name, description, gramming, cost, hour, min, sec, productToMenu);
+                MenuFunctions::addNewMenuItem(name, description, gramming, cost, hour, min, sec, productToMenu);
             }
             break;
         }
@@ -644,19 +647,20 @@ public:
     static void menuEditPage() {
         while (true) {
             system(consoleClear.c_str());
-            std::cin.clear();
-            std::cin.ignore(10000, '\n');
-            std::vector<std::shared_ptr<Product>> productToMenu;
-            system(consoleClear.c_str());
-            int hour, min, sec, userCh;
-            std::string name, description, str_input;
-            float gramming, cost;
-            system(consoleClear.c_str());
+
             for (const auto &item: Menu::menuProductList) {
+
                 std::cout << item;
             }
+
+            std::vector<std::shared_ptr<Product>> productToMenu;
+            int hour, min, sec, menuId;
+            std::string name, description, str_input;
+            float gramming, cost;
+
             std::cout << "Введите id пункта заказа для изменения(Введите 0 для выхода): " << std::endl;
-            std::cin >> userCh;
+            std::cin >> menuId;
+
             if (std::cin.fail()) {
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
@@ -665,23 +669,27 @@ public:
                 getchar();
                 continue;
             }
-            if (userCh == 0){
+
+            if (menuId == 0){
                 break;
             }
-            if (userCh > Menu::menuProductList.size() or userCh < 0){
+
+            if (menuId > Menu::menuProductList.size() or menuId < 0){
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
                 std::cout << "Ошибка! Число вне диапазона выбора!" << std::endl;
                 std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
                 getchar();
-                break;
+                continue;
             }
+
             std::cout << "Введите название пункта меню: " << std::endl;
             std::cin >> name;
             std::cout << "Введите описание пункта меню: " << std::endl;
             std::cin >> description;
             std::cout << "Введите стоимость пукнта меню: " << std::endl;
             std::cin >> cost;
+
             if (std::cin.fail()) {
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
@@ -690,8 +698,10 @@ public:
                 getchar();
                 continue;
             }
+
             std::cout << "Введите граммовку пункта меню: " << std::endl;
             std::cin >> gramming;
+
             if (std::cin.fail()) {
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
@@ -700,8 +710,10 @@ public:
                 getchar();
                 continue;
             }
+
             std::cout << "Введите часы приготовления: " << std::endl;
             std::cin >> hour;
+
             if (std::cin.fail()) {
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
@@ -710,6 +722,7 @@ public:
                 getchar();
                 continue;
             }
+
             if (hour > 23) {
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
@@ -718,8 +731,10 @@ public:
                 getchar();
                 continue;
             }
+
             std::cout << "Введите минуты приготовления: " << std::endl;
             std::cin >> min;
+
             if (std::cin.fail()) {
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
@@ -728,6 +743,7 @@ public:
                 getchar();
                 continue;
             }
+
             if (min > 59) {
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
@@ -741,6 +757,7 @@ public:
             if (std::cin.fail()) {
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
+
                 std::cout << "Ошибка! Введите число!" << std::endl;
                 std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
                 getchar();
@@ -749,36 +766,48 @@ public:
             if (sec > 59) {
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
+
                 std::cout << "Ошибка! Выход за пределы значения!" << std::endl;
                 std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
                 getchar();
                 continue;
             }
+
             std::vector<std::shared_ptr<Product>> products;
             products = Product::productList;
+
             while (true) {
-                std::cin.clear();
-                std::cin.ignore(10000, '\n');
                 int productId;
+
                 if (products.empty()) {
+                    std::cin.clear();
+                    std::cin.ignore(10000, '\n');
+
                     std::cout << "Больше продуктов нет!" << std::endl;
                     std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
                     getchar();
                     break;
                 }
+
                 std::cout << "Выберите продукты из списка: " << std::endl;
                 ProductFunctions::printProductList(products);
                 std::cout << "Выбор(Введите 0 для выхода): ";
                 std::cin >> productId;
+
                 if (std::cin.fail()) {
+                    std::cin.clear();
+                    std::cin.ignore(10000, '\n');
+
                     std::cout << "Ошибка! Введите число!" << std::endl;
                     std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
                     getchar();
                     continue;
                 }
+
                 if (productId == 0) {
                     break;
                 }
+
                 try {
                     auto iterator = std::find_if(products.begin(), products.end(),
                                                  [productId](const std::shared_ptr<Product> &product) {
@@ -792,6 +821,9 @@ public:
                                                   }), products.end());
                 }
                 catch (std::exception ex) {
+                    std::cin.clear();
+                    std::cin.ignore(10000, '\n');
+
                     std::cout << "Такого продукта нету в списке!" << std::endl;
                     std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
                     getchar();
@@ -799,10 +831,55 @@ public:
                 }
 
             }
+
             if (!productToMenu.empty()) {
-                MenuFunctions::editMenu(userCh ,name, description, gramming, cost, hour, min, sec, productToMenu);
+                MenuFunctions::editMenuItem(menuId, name, description, gramming, cost, hour, min, sec, productToMenu);
             }
+
             break;
+        }
+    }
+
+    static void menuDeletePage(){
+        while (true) {
+            system(consoleClear.c_str());
+
+            int menuId = 0;
+
+            for (const auto &item: Menu::menuProductList) {
+
+                std::cout << item;
+            }
+            std::cout << "Введите id пункта меню для удаления: " << std::endl;
+            std::cin >> menuId;
+
+            if (std::cin.fail()){
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                std::cout << "Ошибка! Введите число!" << std::endl;
+                std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                getchar();
+                continue;
+            }
+            if (menuId == 0){
+                break;
+            }
+            try {
+                auto iterator = std::find_if(Menu::menuProductList.begin(), Menu::menuProductList.end(),
+                                             [menuId](const std::shared_ptr<Menu> &menu) {
+                                                 return menu->id == menuId;
+                                             });
+            }
+            catch (std::exception ex){
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                std::cout << "Ошибка! Такого пункта нету!" << std::endl;
+                std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                getchar();
+                continue;
+            }
+            MenuFunctions::deleteMenuItem(menuId);
+
         }
     }
 
