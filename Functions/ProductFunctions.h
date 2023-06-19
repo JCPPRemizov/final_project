@@ -18,16 +18,14 @@ static void addNewProduct(const std::string& name, const float& cost){
     }
     Product::productList.push_back(std::make_shared<Product>(lastId, name, cost));
 
-    std::thread productListThread([](){Product::saveStaffToJson();});
-    productListThread.join();
+    saveProduct();
 }
 
 static void editProduct(const std::shared_ptr<Product>& product, const std::string& name, const float& cost){
     product->name = name;
     product->cost = cost;
 
-    std::thread productListThread([](){Product::saveStaffToJson();});
-    productListThread.join();
+    saveProduct();
 }
 
 static void printProductList(const std::vector<std::shared_ptr<Product>>& products){
@@ -37,7 +35,20 @@ static void printProductList(const std::vector<std::shared_ptr<Product>>& produc
         }
     }
 }
+static void deleteProduct(const int& productId){
+    Product::productList.erase(std::remove_if(Product::productList.begin(), Product::productList.end(),[productId](const std::shared_ptr<Product> &product) {return product->id == productId;}), Product::productList.end());
+    saveProduct();
+}
+static void saveProduct(){
+    std::thread saveProducts([](){Product::saveProductsToJson();});
+    saveProducts.join();
+}
+static void loadProduct(){
+    std::thread loadProducts([](){Product::loadProductsFromJson();});
+    loadProducts.join();
+}
 };
+
 
 
 #endif //FINAL_PROJECT_PRODUCTFUNCTIONS_H

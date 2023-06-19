@@ -41,9 +41,7 @@ public:
             }
         }
         Employee::addNewEmployee(employee);
-        std::thread saveStaffThread([](){Employee::saveStaffToJson();});
-        saveStaffThread.join();
-        Employee::saveStaffToJson();
+        saveEmployee();
         std::cout << "Новая учетная запись создана!" << std::endl;
     }
 
@@ -76,6 +74,7 @@ public:
         employee->middle_name = middle_name;
         employee->login = login;
         employee->password = hash(password);
+        saveEmployee();
 
     }
 
@@ -105,6 +104,23 @@ public:
         }
         EmployeeFunctions::registration(type, name, surname, middle_name, login, password);
     }
+
+    static void deleteEmployee(const std::string& login){
+        Employee::staff.erase(std::remove_if( Employee::staff.begin(),  Employee::staff.end(),[login](const std::shared_ptr<Employee> &employee) {return employee->login == login;}),  Employee::staff.end());
+        saveEmployee();
+
+    }
+
+    static void saveEmployee(){
+        std::thread saveStaffThread([](){Employee::saveStaffToJson();});
+        saveStaffThread.join();
+    }
+
+    static void loadEmployee(){
+        std::thread loadStaffThread([](){Employee::loadStaffFromJson();});
+        loadStaffThread.join();
+    }
+
 };
 
 
