@@ -5,6 +5,7 @@
 #include <vector>
 #include "EmployeeFunctions.h"
 #include "ProductFunctions.h"
+#include "MenuFunctions.h"
 
 #ifdef LINUX
 static std::string consoleClear = "clear";
@@ -23,8 +24,10 @@ public:
             system(consoleClear.c_str());
             int action;
             std::cout << "Страница админа" << std::endl;
-            std::cout << "1.Редактировать учетные записи\n2.Регистрация новой учетной записи\n3.Список продуктов\n4.Добавление продукта"
-                       "\n5.Редактирование продуктов\nВыберите действие(Введите 0 для выхода):" << std::endl;
+            std::cout
+                    << "1.Редактировать учетные записи\n2.Регистрация новой учетной записи\n3.Список продуктов\n4.Добавление продукта"
+                       "\n5.Редактирование продуктов\n6.Добавление товара в меню\n7.Просмотр пунктов меню\nВыберите действие(Введите 0 для выхода):"
+                    << std::endl;
             std::cin >> action;
             if (std::cin.fail()) {
                 std::cin.clear();
@@ -34,7 +37,7 @@ public:
                 getchar();
                 continue;
             }
-            if (action == 0){
+            if (action == 0) {
                 break;
             } else if (action == 1) {
                 userRefactorPage();
@@ -42,10 +45,14 @@ public:
                 newUserRegistrationPage();
             } else if (action == 3) {
                 productListPage();
-            } else if (action == 4){
+            } else if (action == 4) {
                 productAddPage();
-            } else if (action == 5){
-               productEditPage();
+            } else if (action == 5) {
+                productEditPage();
+            } else if (action == 6) {
+                menuAddPage();
+            } else if (action == 7) {
+                menuPrintPage();
             } else {
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
@@ -141,7 +148,7 @@ public:
 
             std::cout << "Выберите пользователя для редактирования (Введите 0 для выхода): " << std::endl;
 
-            for (const auto& item: Employee::staff) {
+            for (const auto &item: Employee::staff) {
                 i++;
                 std::cout << i << ". " << "Имя: " << item->name << "\n" << "Фамилия: " << item->surname << "\n"
                           << "Логин: " << item->login << "\n"
@@ -239,11 +246,11 @@ public:
     static void startPage() {
         int action;
         std::thread loadStaffThread([]() { Employee::loadStaffFromJson(); });
-        std::thread productListThread([](){Product::loadStaffFromJson();});
+        std::thread productListThread([]() { Product::loadStaffFromJson(); });
         loadStaffThread.join();
         productListThread.join();
         if (!Employee::staff.empty()) {
-            for (const auto& item: Employee::staff) {
+            for (const auto &item: Employee::staff) {
                 if (item->employeeType == EmployeeType(ADMIN)) {
                     isAdminExist = true;
                 }
@@ -253,7 +260,8 @@ public:
             system(consoleClear.c_str());
             if (!isAdminExist) {
                 std::cout << "Добро пожаловать!\n" << "Доступные действия:\n"
-                          << "1.Авторизация\n2.Регистрация админа\n3.Войти как гость\nВыберите действие(Для выхода введите 0): " << std::endl;
+                          << "1.Авторизация\n2.Регистрация админа\n3.Войти как гость\nВыберите действие(Для выхода введите 0): "
+                          << std::endl;
             } else {
                 std::cout << "Добро пожаловать!\n" << "Доступные действия:\n"
                           << "1.Авторизация\n2.Войти как гость\nВыберите действие(Для выхода введите 0): " << std::endl;
@@ -267,7 +275,7 @@ public:
                 getchar();
                 continue;
             }
-            if (action == 0){
+            if (action == 0) {
                 break;
             }
             if (!isAdminExist) {
@@ -318,8 +326,8 @@ public:
         std::cin.get();
     }
 
-    static void productAddPage(){
-        while (true){
+    static void productAddPage() {
+        while (true) {
             system(consoleClear.c_str());
             std::string name;
             float cost;
@@ -327,7 +335,7 @@ public:
             std::cin >> name;
             std::cout << "Введите стоимость продукта: " << std::endl;
             std::cin >> cost;
-            if (std::cin.fail()){
+            if (std::cin.fail()) {
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
                 std::cout << "Ошибка! Введите число!" << std::endl;
@@ -340,17 +348,17 @@ public:
         }
     }
 
-    static void productEditPage(){
-        while(true){
+    static void productEditPage() {
+        while (true) {
             system(consoleClear.c_str());
             std::shared_ptr<Product> product;
             int productId;
             std::string name;
             float cost;
-            ProductFunctions::printProductList();
+            ProductFunctions::printProductList(Product::productList);
             std::cout << "Введите ID товара для редактирования(Введите 0 для выхода): " << std::endl;
             std::cin >> productId;
-            if (std::cin.fail()){
+            if (std::cin.fail()) {
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
                 std::cout << "Ошибка! Введите число!" << std::endl;
@@ -358,15 +366,15 @@ public:
                 getchar();
                 continue;
             }
-            if (productId == 0){
+            if (productId == 0) {
                 break;
             }
-            for (const auto& item:Product::productList){
-                if (productId == item->id){
+            for (const auto &item: Product::productList) {
+                if (productId == item->id) {
                     product = item;
                 }
             }
-            if (product == nullptr){
+            if (product == nullptr) {
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
                 std::cout << "Такого товара нету!" << std::endl;
@@ -380,7 +388,7 @@ public:
             std::cin >> name;
             std::cout << "Введите новую стоимость товара" << std::endl;
             std::cin >> cost;
-            if (std::cin.fail()){
+            if (std::cin.fail()) {
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
                 std::cout << "Ошибка! Введите число!" << std::endl;
@@ -393,10 +401,129 @@ public:
         }
     }
 
-    static void productListPage(){
-        while(true){
+    static void productListPage() {
+        while (true) {
             system(consoleClear.c_str());
-            ProductFunctions::printProductList();
+            ProductFunctions::printProductList(Product::productList);
+            std::cout << "Нажмите любую клвишу для выхода" << std::endl;
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+            getchar();
+            break;
+        }
+    }
+
+    static void menuAddPage() {
+        while (true) {
+            system(consoleClear.c_str());
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+            std::vector<std::shared_ptr<Product>> productToMenu;
+            system(consoleClear.c_str());
+            int hour, min, sec;
+            std::string name, description, str_input;
+            float gramming, cost;
+            std::cout << "Введите название пункта меню: " << std::endl;
+            std::cin >> name;
+            std::cout << "Введите описание пункта меню: " << std::endl;
+            std::cin >> description;
+            std::cout << "Введите стоимость пукнта меню: " << std::endl;
+            std::cin >> cost;
+            if (std::cin.fail()) {
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                std::cout << "Ошибка! Введите число!" << std::endl;
+                std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                getchar();
+                continue;
+            }
+            std::cout << "Введите граммовку пункта меню: " << std::endl;
+            std::cin >> gramming;
+            if (std::cin.fail()) {
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                std::cout << "Ошибка! Введите число!" << std::endl;
+                std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                getchar();
+                continue;
+            }
+            std::cout << "Введите часы приготовления: " << std::endl;
+            std::cin >> hour;
+            if (std::cin.fail()) {
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                std::cout << "Ошибка! Введите число!" << std::endl;
+                std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                getchar();
+                continue;
+            }
+            std::cout << "Введите минуты приготовления: " << std::endl;
+            std::cin >> min;
+            if (std::cin.fail()) {
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                std::cout << "Ошибка! Введите число!" << std::endl;
+                std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                getchar();
+                continue;
+            }
+            std::cout << "Введите секунды приготовления: " << std::endl;
+            std::cin >> sec;
+            if (std::cin.fail()) {
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                std::cout << "Ошибка! Введите число!" << std::endl;
+                std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                getchar();
+                continue;
+            }
+            std::vector<std::shared_ptr<Product>> products;
+            products = Product::productList;
+            while (true) {
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                int productId;
+                if (products.empty()){
+                    std::cout << "Больше продуктов нет!" << std::endl;
+                    std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                    getchar();
+                    break;
+                }
+                std::cout << "Выберите продукты из списка: " << std::endl;
+                ProductFunctions::printProductList(products);
+                std::cout << "Выбор(Введите 0 для выхода): ";
+                std::cin >> productId;
+                if (std::cin.fail()) {
+                    std::cout << "Ошибка! Введите число!" << std::endl;
+                    std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                    getchar();
+                    continue;
+                }
+                if (productId == 0) {
+                    break;
+                }
+                productToMenu.push_back(products[productId - 1]);
+                products.erase(std::remove_if(products.begin(), products.end(),[productId](const std::shared_ptr<Product> &product) {return product->id == productId;}), products.end());
+
+            }
+            if (productToMenu.empty()) {
+                std::cout << "Ошибка! Вы не указали продукты для пункта меню!" << std::endl;
+                std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                getchar();
+                continue;
+            }
+            MenuFunctions::addNewMenu(name, description, gramming, cost, hour, min, sec, productToMenu);
+            break;
+        }
+    }
+
+    static void menuPrintPage() {
+        while (true) {
+            system(consoleClear.c_str());
+            for (const auto &item: Menu::menuProductList) {
+
+                std::cout << item;
+            }
             std::cout << "Нажмите любую клвишу для выхода" << std::endl;
             std::cin.clear();
             std::cin.ignore(10000, '\n');

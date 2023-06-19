@@ -30,9 +30,9 @@ static void editProduct(const std::shared_ptr<Product>& product, const std::stri
     productListThread.join();
 }
 
-static void printProductList(){
-    if (!Product::productList.empty()){
-        for (const auto& item:Product::productList){
+static void printProductList(const std::vector<std::shared_ptr<Product>>& products){
+    if (!products.empty()){
+        for (const auto& item:products){
             std::cout << "ID: " << item->id << "\n" << "Название: " << item->name << "\n" << "Стоимость: " << item->cost << "\n" << "--------------------------" << std::endl;
         }
     }
