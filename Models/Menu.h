@@ -10,7 +10,7 @@
 #include <memory>
 #include "Product.h"
 
-class Menu{
+class Menu {
 private:
     void toJson(json &j) const {
         j["id"] = id;
@@ -45,7 +45,7 @@ private:
 
         std::vector<std::shared_ptr<Product>> menuProductList;
 
-        for(const auto& productData:j["productList"]){
+        for (const auto &productData: j["productList"]) {
 
             std::uint16_t productId = productData["productId"];
             std::string productName = productData["productName"];
@@ -56,6 +56,7 @@ private:
 
         return std::make_shared<Menu>(id, name, description, gramming, cost, hour, min, sec, menuProductList);
     }
+
 public:
     static inline std::vector<std::shared_ptr<Menu>> menuProductList;
     std::uint16_t id;
@@ -64,7 +65,9 @@ public:
     float gramming, cost;
     std::vector<std::shared_ptr<Product>> productList;
 
-    Menu(const std::uint16_t& id ,const std::string& name, const std::string& description, const float& gramming, const float& cost, const int& hour, const int& min, const int& sec, const std::vector<std::shared_ptr<Product>>& productList){
+    Menu(const std::uint16_t &id, const std::string &name, const std::string &description, const float &gramming,
+         const float &cost, const int &hour, const int &min, const int &sec,
+         const std::vector<std::shared_ptr<Product>> &productList) {
         this->id = id;
         this->name = name;
         this->description = description;
@@ -76,7 +79,7 @@ public:
         this->productList = productList;
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const std::shared_ptr<Menu>& menu) {
+    friend std::ostream &operator<<(std::ostream &os, const std::shared_ptr<Menu> &menu) {
         os << "ID: " << menu->id << std::endl;
         os << "Название: " << menu->name << std::endl;
         os << "Описание: " << menu->description << std::endl;
@@ -87,7 +90,7 @@ public:
         std::string timeString = oss.str();
         os << "Время готовки: " << timeString << std::endl;
         os << "Продукты: " << std::endl;
-        for (const auto& item:menu->productList){
+        for (const auto &item: menu->productList) {
             os << item->name << std::endl;
         }
         os << "--------------------------------------" << std::endl;
@@ -96,24 +99,19 @@ public:
     }
 
     static void saveMenuItemsToJson() {
-        if (!menuProductList.empty()) {
-            json jMenuItems;
-            std::string filename = "menuItems.json";
-            for (const auto &menuItem: menuProductList) {
-                json j;
-                menuItem->toJson(j);
-                jMenuItems.push_back(j);
-            }
-            std::ofstream ofs(filename);
-            if (ofs.is_open()) {
-                ofs << jMenuItems.dump(4);
-                ofs.close();
-            } else {
-                std::cerr << "Ошибка записи в файл." << std::endl;
-            }
+        json jMenuItems;
+        std::string filename = "menuItems.json";
+        for (const auto &menuItem: menuProductList) {
+            json j;
+            menuItem->toJson(j);
+            jMenuItems.push_back(j);
+        }
+        std::ofstream ofs(filename);
+        if (ofs.is_open()) {
+            ofs << jMenuItems.dump(4);
+            ofs.close();
         } else {
-            std::string filename = "products.json";
-            std::ofstream ofs(filename);
+            std::cerr << "Ошибка записи в файл." << std::endl;
         }
     }
 
@@ -131,7 +129,7 @@ public:
                 std::cerr << "Ошибка чтения файла." << std::endl;
             }
         }
-        catch (std::exception ex){
+        catch (std::exception ex) {
 
         }
     }

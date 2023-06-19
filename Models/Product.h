@@ -37,22 +37,18 @@ public:
     }
 
     static void saveProductsToJson() {
-        if (!productList.empty()) {
-            json jProduct;
-            std::string filename = "products.json";
-            for (const auto &product: productList) {
-                json j;
-                product->toJson(j);
-                jProduct.push_back(j);
-            }
+        json jProduct;
+        std::string filename = "products.json";
+        for (const auto &product: productList) {
+            json j;
+            product->toJson(j);
+            jProduct.push_back(j);
+        }
 
-            std::ofstream ofs(filename);
-            if (ofs.is_open()) {
-                ofs << jProduct.dump(4);
-                ofs.close();
-            } else {
-                std::cerr << "Ошибка записи в файл." << std::endl;
-            }
+        std::ofstream ofs(filename);
+        if (ofs.is_open()) {
+            ofs << jProduct.dump(4);
+            ofs.close();
         } else {
             std::string filename = "products.json";
             std::ofstream ofs(filename);
@@ -73,7 +69,7 @@ public:
                 std::cerr << "Ошибка чтения файла." << std::endl;
             }
         }
-        catch (std::exception ex){
+        catch (std::exception ex) {
 
         }
     }
