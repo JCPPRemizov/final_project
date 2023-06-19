@@ -2,7 +2,7 @@
 #define FINAL_PROJECT_PAGES_H
 
 #include <vector>
-#include "PagesFunctions.h"
+#include "EmployeeFunctions.h"
 
 class Pages {
 private:
@@ -49,7 +49,7 @@ public:
             std::cin >> surname;
             std::cout << "Введите Отчество: " << std::endl;
             std::cin >> middle_name;
-            PagesFunctions::registration(EmployeeType(ADMIN), name, surname, middle_name, login, password);
+            EmployeeFunctions::registration(EmployeeType(ADMIN), name, surname, middle_name, login, password);
             std::cout << "Успешная регистрация!" << std::endl;
             isAdminExist = true;
             break;
@@ -100,7 +100,7 @@ public:
             std::cout << "Введите Отчество: " << std::endl;
             std::cin >> middle_name;
 
-            PagesFunctions::addNewEmployee(action, name, surname, middle_name, login, password);
+            EmployeeFunctions::addNewEmployee(action, name, surname, middle_name, login, password);
         }
 
     }
@@ -174,7 +174,7 @@ public:
             std::cout << "Введите Отчество: " << std::endl;
             std::cin >> middle_name;
 
-            PagesFunctions::editEmployee(userNum, action, name, surname, middle_name, login, password);
+            EmployeeFunctions::editEmployee(userNum, action, name, surname, middle_name, login, password);
         }
     }
 
@@ -189,7 +189,7 @@ public:
             std::cin >> login;
             std::cout << "Введите пароль: " << std::endl;
             std::cin >> password;
-            std::shared_ptr<Employee> employee = PagesFunctions::authorization(login, password);
+            std::shared_ptr<Employee> employee = EmployeeFunctions::authorization(login, password);
             if (employee == nullptr) {
                 std::cout << "Неверный логин или пароль!" << std::endl;
                 std::cout << "Нажмите любую клавишу для продолежения" << std::endl;

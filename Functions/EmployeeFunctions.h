@@ -2,8 +2,8 @@
 // Created by jcpremizov on 18.06.23.
 //
 
-#ifndef FINAL_PROJECT_PAGESFUNCTIONS_H
-#define FINAL_PROJECT_PAGESFUNCTIONS_H
+#ifndef FINAL_PROJECT_EMPLOYEEFUNCTIONS_H
+#define FINAL_PROJECT_EMPLOYEEFUNCTIONS_H
 
 
 #include <memory>
@@ -12,7 +12,7 @@
 #include "Employee.h"
 #include "HashPassword.h"
 
-class PagesFunctions {
+class EmployeeFunctions {
 public:
     static std::shared_ptr<Employee> authorization(const std::string& login, const std::string& password){
 
@@ -103,9 +103,9 @@ public:
             case 6:
                 type = EmployeeType::WAITER;
         }
-        PagesFunctions::registration(type, name, surname, middle_name, login, password);
+        EmployeeFunctions::registration(type, name, surname, middle_name, login, password);
     }
 };
 
 
-#endif //FINAL_PROJECT_PAGESFUNCTIONS_H
+#endif //FINAL_PROJECT_EMPLOYEEFUNCTIONS_H
