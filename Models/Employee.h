@@ -10,6 +10,7 @@
 #include <fstream>
 #include "EmployeeTypes.h"
 #include "json.hpp"
+
 using json = nlohmann::json;
 class Employee {
 private:

@@ -5,6 +5,7 @@
 #include <vector>
 #include "EmployeeFunctions.h"
 #include "ProductFunctions.h"
+
 #ifdef LINUX
 static std::string consoleClear = "clear";
 #endif
@@ -22,9 +23,8 @@ public:
             system(consoleClear.c_str());
             int action;
             std::cout << "Страница админа" << std::endl;
-            std::cout
-                    << "1.Редактировать учетные записи\n2.Регистрация новой учетной записи\n3.Список продуктов\n4.Добавление продукта\n5.Выход\nВыберите действие:"
-                    << std::endl;
+            std::cout << "1.Редактировать учетные записи\n2.Регистрация новой учетной записи\n3.Список продуктов\n4.Добавление продукта"
+                       "\n5.Редактирование продуктов\nВыберите действие(Введите 0 для выхода):" << std::endl;
             std::cin >> action;
             if (std::cin.fail()) {
                 std::cin.clear();
@@ -34,7 +34,9 @@ public:
                 getchar();
                 continue;
             }
-            if (action == 1) {
+            if (action == 0){
+                break;
+            } else if (action == 1) {
                 userRefactorPage();
             } else if (action == 2) {
                 newUserRegistrationPage();
@@ -43,7 +45,7 @@ public:
             } else if (action == 4){
                 productAddPage();
             } else if (action == 5){
-                break;
+               productEditPage();
             } else {
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
@@ -237,7 +239,9 @@ public:
     static void startPage() {
         int action;
         std::thread loadStaffThread([]() { Employee::loadStaffFromJson(); });
+        std::thread productListThread([](){Product::loadStaffFromJson();});
         loadStaffThread.join();
+        productListThread.join();
         if (!Employee::staff.empty()) {
             for (const auto& item: Employee::staff) {
                 if (item->employeeType == EmployeeType(ADMIN)) {
@@ -333,6 +337,59 @@ public:
             }
             ProductFunctions::addNewProduct(name, cost);
             break;
+        }
+    }
+
+    static void productEditPage(){
+        while(true){
+            system(consoleClear.c_str());
+            std::shared_ptr<Product> product;
+            int productId;
+            std::string name;
+            float cost;
+            ProductFunctions::printProductList();
+            std::cout << "Введите ID товара для редактирования(Введите 0 для выхода): " << std::endl;
+            std::cin >> productId;
+            if (std::cin.fail()){
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                std::cout << "Ошибка! Введите число!" << std::endl;
+                std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                getchar();
+                continue;
+            }
+            if (productId == 0){
+                break;
+            }
+            for (const auto& item:Product::productList){
+                if (productId == item->id){
+                    product = item;
+                }
+            }
+            if (product == nullptr){
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                std::cout << "Такого товара нету!" << std::endl;
+                std::cout << "Ошибка! Введите число!" << std::endl;
+                std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                getchar();
+                continue;
+            }
+
+            std::cout << "Введите новое имя товара:" << std::endl;
+            std::cin >> name;
+            std::cout << "Введите новую стоимость товара" << std::endl;
+            std::cin >> cost;
+            if (std::cin.fail()){
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                std::cout << "Ошибка! Введите число!" << std::endl;
+                std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                getchar();
+                continue;
+            }
+            ProductFunctions::editProduct(product, name, cost);
+
         }
     }
 
