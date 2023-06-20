@@ -14,7 +14,7 @@
 using json = nlohmann::json;
 class Employee {
 private:
-    void toJson(json& j) const {
+    inline void toJson(json& j) const {
         j["employeeType"] = employeeType;
         j["login"] = login;
         j["password"] = password;
@@ -22,7 +22,7 @@ private:
         j["surname"] = surname;
         j["middle_name"] = middle_name;
     }
-    static std::shared_ptr<Employee> fromJson(const json& j) {
+    static inline std::shared_ptr<Employee> fromJson(const json& j) {
         EmployeeType employeeType = j["employeeType"].get<EmployeeType>();
         std::string login = j["login"].get<std::string>();
         size_t password = j["password"].get<size_t>();
@@ -49,7 +49,7 @@ public:
         staff.push_back(std::shared_ptr<Employee>(employee));
     }
 
-    static void saveStaffToJson() {
+    static inline void saveStaffToJson() {
         json jStaff;
         std::string filename = "staff.json";
         for (const auto& employee : staff) {
@@ -67,7 +67,7 @@ public:
         }
     }
 
-    static void loadStaffFromJson() {
+    static inline void loadStaffFromJson() {
         try {
             std::string filename = "staff.json";
             std::ifstream ifs(filename);

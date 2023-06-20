@@ -6,14 +6,14 @@
 #define FINAL_PROJECT_STARTPAGES_H
 
 #include "AdminPages.h"
-#include "WarehousePages.h"
+#include "WarehouseManagerPages.h"
 
 class StartPage{
 private:
     static inline bool isAdminExist;
 public:
 
-    static void adminRegPage() {
+    static inline void adminRegPage() {
     while (true) {
         system(consoleClear.c_str());
         std::string login, password, name, surname, middle_name;
@@ -35,7 +35,7 @@ public:
         break;
     }
 }
-    static void authorizationPage() {
+    static inline void authorizationPage() {
     while (true) {
         system(consoleClear.c_str());
         std::string login, password;
@@ -60,14 +60,14 @@ public:
                 AdminPages::adminPage();
                 break;
             case WAREHOUSE_MANAGER:
-                WarehousePages::warehousePage();
+                WarehouseManagerPages::warehousePage();
                 break;
         }
         break;
 
     }
 }
-    static void startPage() {
+    static inline void startPage() {
     int action;
     EmployeeFunctions::loadEmployee();
     ProductFunctions::loadProduct();
@@ -143,4 +143,5 @@ public:
 }
 
 };
+
 #endif //FINAL_PROJECT_STARTPAGES_H

@@ -18,7 +18,7 @@ static std::string consoleClear = "cls";
 
 class AdminPages {
 public:
-    static void adminPage() {
+    static inline void adminPage(){
         while (true) {
             system(consoleClear.c_str());
             int action;
@@ -71,7 +71,7 @@ public:
         }
     }
 
-    static void newUserRegistrationPage() {
+    static inline void newUserRegistrationPage() {
         std::string login, password, name, surname, middle_name;
         while (true) {
             system(consoleClear.c_str());
@@ -117,10 +117,9 @@ public:
 
             EmployeeFunctions::addNewEmployee(action, name, surname, middle_name, login, password);
         }
-
     }
 
-    static void userRefactorPage() {
+    static inline void userRefactorPage() {
         while (true) {
 
             system(consoleClear.c_str());
@@ -194,7 +193,7 @@ public:
         }
     }
 
-    static void userDeletePage() {
+    static inline void userDeletePage() {
         while (true) {
 
             system(consoleClear.c_str());
@@ -239,7 +238,7 @@ public:
         }
     }
 
-    static void productAddPage() {
+    static inline void productAddPage() {
         while (true) {
             system(consoleClear.c_str());
             std::string name;
@@ -261,7 +260,7 @@ public:
         }
     }
 
-    static void productDeletePage() {
+    static inline void productDeletePage() {
         while (true) {
             system(consoleClear.c_str());
             std::shared_ptr<Product> product;
@@ -299,7 +298,7 @@ public:
         }
     }
 
-    static void productEditPage() {
+    static inline void productEditPage() {
         while (true) {
             system(consoleClear.c_str());
             std::shared_ptr<Product> product;
@@ -352,7 +351,7 @@ public:
         }
     }
 
-    static void productListPage() {
+    static inline void productListPage() {
         while (true) {
             system(consoleClear.c_str());
             ProductFunctions::printProductList(Product::productList);
@@ -364,7 +363,7 @@ public:
         }
     }
 
-    static void menuAddPage() {
+    static inline void menuAddPage() {
         while (true) {
             system(consoleClear.c_str());
             std::cin.clear();
@@ -505,7 +504,7 @@ public:
         }
     }
 
-    static void menuEditPage() {
+    static inline void menuEditPage() {
         while (true) {
             system(consoleClear.c_str());
 
@@ -701,7 +700,7 @@ public:
         }
     }
 
-    static void menuDeletePage(){
+    static inline void menuDeletePage() {
         while (true) {
             system(consoleClear.c_str());
 
@@ -744,7 +743,7 @@ public:
         }
     }
 
-    static void menuPrintPage() {
+    static inline void menuPrintPage() {
         while (true) {
             system(consoleClear.c_str());
             for (const auto &item: Menu::menuProductList) {

@@ -23,20 +23,20 @@ public:
         this->cost = cost;
     }
 
-    void toJson(json &j) const {
+    inline void toJson(json &j) const {
         j["productId"] = id;
         j["productName"] = name;
         j["productCost"] = cost;
     }
 
-    static std::shared_ptr<Product> fromJson(const json &j) {
+    static inline std::shared_ptr<Product> fromJson(const json &j) {
         std::uint16_t id = j["productId"].get<std::uint16_t>();
         std::string name = j["productName"].get<std::string>();
         float cost = j["productCost"].get<size_t>();
         return std::make_shared<Product>(id, name, cost);
     }
 
-    static void saveProductsToJson() {
+    static inline void saveProductsToJson() {
         json jProduct;
         std::string filename = "products.json";
         for (const auto &product: productList) {
@@ -55,7 +55,7 @@ public:
         }
     }
 
-    static void loadProductsFromJson() {
+    static inline void loadProductsFromJson() {
         try {
             std::string filename = "products.json";
             std::ifstream ifs(filename);

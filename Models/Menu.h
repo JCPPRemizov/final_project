@@ -12,7 +12,7 @@
 
 class Menu {
 private:
-    void toJson(json &j) const {
+    inline void toJson(json &j) const {
         j["id"] = id;
         j["name"] = name;
         j["description"] = description;
@@ -33,7 +33,7 @@ private:
         j["productList"] = jMenuProductList;
     }
 
-    static std::shared_ptr<Menu> fromJson(const json &j) {
+    static inline std::shared_ptr<Menu> fromJson(const json &j) {
         std::uint16_t id = j["id"].get<std::uint16_t>();
         std::string name = j["name"].get<std::string>();
         std::string description = j["description"].get<std::string>();
@@ -98,7 +98,7 @@ public:
         return os;
     }
 
-    static void saveMenuItemsToJson() {
+    static inline void saveMenuItemsToJson() {
         json jMenuItems;
         std::string filename = "menuItems.json";
         for (const auto &menuItem: menuProductList) {
@@ -115,7 +115,7 @@ public:
         }
     }
 
-    static void loadMenuItemsFromJson() {
+    static inline void loadMenuItemsFromJson() {
         try {
             std::string filename = "menuItems.json";
             std::ifstream ifs(filename);

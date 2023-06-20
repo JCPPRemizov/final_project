@@ -1,13 +1,12 @@
 # ninja log v5
+2	3660	1687274531127625181	CMakeFiles/final_project.dir/Pages/AdminPages.cpp.o	1473c717a81c9654
 1	1236	1686856761950932933	libs/auth/CMakeFiles/authorization.dir/authorization.cpp.o	7c56962704e406c5
 1	322	1686932994077322199	CMakeFiles/final_project.dir/Functions/Authorization.cpp.o	c342c4478bd49f4f
-118	775	1687267532666092160	build.ninja	ebfddc182c334b2
-4402	4523	1687209070531497405	final_project	a954ae31ff7b6675
+0	23	1687280405690132334	build.ninja	ebfddc182c334b2
+1	121	1687275502847426599	final_project	a954ae31ff7b6675
 1	254	1687127734602275876	CMakeFiles/final_project.dir/Functions/HashPassword.cpp.o	ad93b17d52bfd0ba
 1236	1564	1686856762278934678	libs/auth/libauthorization.so	9f9a78b4d2698d83
 1	30	1687119366316945960	CMakeFiles/final_project.dir/Pages/Pages.cpp.o	e9caf0bd2c47169f
 1	353	1687105340314354760	CMakeFiles/final_project.dir/Models/EmployeeTypes.cpp.o	eaf840536d50f77f
-2	4402	1687209070403496528	CMakeFiles/final_project.dir/main.cpp.o	1d69d2f464ffe245
+0	4054	1687275491687335741	CMakeFiles/final_project.dir/main.cpp.o	1d69d2f464ffe245
 1	12	1686932749003202150	CMakeFiles/final_project.dir/Models/Employee.cpp.o	fa220b628db6dfa4
-1	4763	1687267633794719723	CMakeFiles/final_project.dir/main.cpp.o	1d69d2f464ffe245
-4764	5319	1687267634354722804	final_project	a954ae31ff7b6675
