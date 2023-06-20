@@ -12,9 +12,9 @@
 
 class Request{
 public:
-    static inline std::vector<Request> requestsList;
+    static inline std::vector<std::shared_ptr<Request>> requestsList;
 
     std::uint16_t id;
-    std::vector<std::map<int, std::shared_ptr<Product>>> rProductsList;
+    std::vector<std::map<int, std::map<int, std::shared_ptr<Product>>>> rProductsList;
 };
 #endif //FINAL_PROJECT_REQUEST_H
