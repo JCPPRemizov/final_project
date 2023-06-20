@@ -14,22 +14,27 @@
 
 class EmployeeFunctions {
 public:
+    // Функция авторизации
     static std::shared_ptr<Employee> authorization(const std::string& login, const std::string& password){
 
-        size_t hashedPassword = hash(password);
+        size_t hashedPassword = hash(password); // Хэширование пароля
         std::shared_ptr<Employee> employee;
+        // Нахождение нужного пользователя
         for (auto item:Employee::staff){
             if (item->login == login and item->password == hashedPassword){
                 employee = item;
             }
         }
+        // Возрващаем пользователя
         return employee;
     }
 
+    // Функция регистрации
     static void registration(EmployeeType employeeType, const std::string& name, const std::string& surname, const std::string& middle_name,
                       const std::string& login, const std::string& password){
-        size_t hasedPassword = hash(password);
-        auto* employee = new Employee(employeeType, name, surname, middle_name, login, hasedPassword);
+        size_t hasedPassword = hash(password); // Хэшируем пароль
+        auto* employee = new Employee(employeeType, name, surname, middle_name, login, hasedPassword); // Создаем нового сотрудника
+        // Проверяем, что логин не занят
         for (auto item:Employee::staff){
             if (item->login == employee->login){
                 std::cout << "Такой логин уже есть!" << std::endl;
@@ -40,11 +45,14 @@ public:
                 return;
             }
         }
+        // Добавляем нового сотрудника в список сотрудников
         Employee::addNewEmployee(employee);
+        // Сохраняем список сотрудников в JSON
         saveEmployee();
         std::cout << "Новая учетная запись создана!" << std::endl;
     }
 
+    // Функция редактирования сотрудника
     static void editEmployee(const int& employeeId, const int& employeeType, const std::string& name, const std::string& surname, const std::string& middle_name,
                                     const std::string& login, const std::string& password){
         EmployeeType type;
