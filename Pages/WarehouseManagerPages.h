@@ -3,18 +3,21 @@
 
 #include <iostream>
 #include "RequestFunctions.h"
+#include "Restaurant.h"
+#include "WarehouseFunctions.h"
 
-class WarehouseManagerPages{
+class WarehouseManagerPages {
 public:
     static inline void warehousePage() {
-        while (true){
+        while (true) {
             system(consoleClear.c_str());
             int action;
             std::cout << "Страница складского менеджера" << std::endl;
-            std::cout << "1.Добавить новую заявку\n2.Удалить заявку\n3.Просмотр заявок\n" << "Выберите действие(Введите 0 для выхода): " << std::endl;
+            std::cout << "1.Добавить новую заявку\n2.Просмотреть склад\n3.Удалить заявку\n4.Просмотр заявок\n"
+                      << "Выберите действие(Введите 0 для выхода): " << std::endl;
             std::cin >> action;
 
-            if (std::cin.fail()){
+            if (std::cin.fail()) {
                 std::cout << "Ошибка! Неверный ввод!" << std::endl;
                 std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
                 std::cin.clear();
@@ -22,15 +25,17 @@ public:
                 getchar();
                 continue;
             }
-            if (action == 0){
+            if (action == 0) {
                 break;
             }
 
-            if (action == 1){
+            if (action == 1) {
                 addNewRequestPage();
             } else if (action == 2){
+                printWarehouseItemsPage();
+            } else if (action == 3) {
                 deleteRequestPage();
-            } else if(action == 3){
+            } else if (action == 4) {
                 requestsPrintPage();
             } else {
                 std::cout << "Ошибка! Введите число в диапазоне от 1 до 1!" << std::endl;
@@ -44,13 +49,15 @@ public:
         }
     }
 
-    static inline void addNewRequestPage(){
+    static inline void addNewRequestPage() {
         std::vector<std::map<int, std::map<int, std::shared_ptr<Product>>>> rProductsList;
+        std::map<int, std::map<int, std::shared_ptr<Product>>> productMap;
+        float cost = 0;
         while (true) {
             system(consoleClear.c_str());
 
-            std::map<int, std::map<int, std::shared_ptr<Product>>> productMap;
             std::map<int, std::shared_ptr<Product>> product;
+            product.clear();
             int productId = 0, count = 0;
 
             std::cout << "Выберите продукты из списка: " << std::endl;
@@ -66,10 +73,7 @@ public:
                 continue;
             }
             if (productId == 0) {
-                if (!rProductsList.empty()){
-                    RequestFunctions::addNewRequest(rProductsList);
-                    RequestFunctions::saveRequestsToJson();
-                }
+
                 break;
             }
 
@@ -79,7 +83,7 @@ public:
                                                  return product->id == productId;
                                              });
 
-                if (productId > Product::productList.size() or productId < 0){
+                if (productId > Product::productList.size() or productId < 0) {
                     std::cin.clear();
                     std::cin.ignore(10000, '\n');
                     std::cout << "Такого продукта нету в списке!" << std::endl;
@@ -102,11 +106,31 @@ public:
                 //std::shared_ptr<Product> pr = *iterator;
 
 
+                /* for (const auto& item:product){
+                     if (item.second == (*iterator)){
+                         product[item.first] == nullptr;
+                         product[count] = *iterator;
+                     }
+                 }*/
+
                 product[count] = *iterator;
+
+                cost += ((*iterator)->cost * (float)count);
+
+                if (cost > Restaurant::balance) {
+                    std::cin.clear();
+                    std::cin.ignore(10000, '\n');
+                    std::cout << "Ошибка! Сумма заявки больше баланса ресторана!" << std::endl;
+                    std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                    getchar();
+                    cost = 0;
+                    continue;
+                }
+
 
                 productMap[productId] = product;
 
-                rProductsList.push_back(productMap);
+
 
 
 /*                Product::productList.erase(std::remove_if(Product::productList.begin(), Product::productList.end(),
@@ -114,6 +138,7 @@ public:
                                                   return product->id == productId;
                                               }), Product::productList.end());*/
             }
+
             catch (std::exception ex) {
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
@@ -122,10 +147,15 @@ public:
                 getchar();
                 continue;
             }
+            rProductsList.push_back(productMap);
+            if (!rProductsList.empty()) {
+                RequestFunctions::addNewRequest(rProductsList);
+                RequestFunctions::saveRequestsToJson();
+            }
         }
     }
 
-    static inline void deleteRequestPage(){
+    static inline void deleteRequestPage() {
         while (true) {
             system(consoleClear.c_str());
             std::shared_ptr<Request> request;
@@ -164,7 +194,7 @@ public:
         }
     }
 
-    static inline void requestsPrintPage(){
+    static inline void requestsPrintPage() {
         while (true) {
             system(consoleClear.c_str());
             RequestFunctions::printRequests();
@@ -174,6 +204,10 @@ public:
             getchar();
             break;
         }
+    }
+
+    static inline void printWarehouseItemsPage(){
+        WarehouseFunctions::printWarehouse();
     }
 };
 
