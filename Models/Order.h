@@ -29,7 +29,8 @@ public:
 
 
    static void placeOrder(std::uint16_t menuId) {
-        auto menuIt = std::find_if(Menu::menuProductList.begin(), Menu::menuProductList.end(), [menuId](const std::shared_ptr<Menu>& menu) {
+        auto menuIt = std::find_if(Menu::menuProductList.begin(), Menu::menuProductList.end(),
+                                   [menuId](const std::shared_ptr<Menu>& menu) {
             return menu->id == menuId;
         });
 
@@ -42,7 +43,8 @@ public:
     }
 
     static void cancelOrder(std::uint16_t menuId) {
-        auto orderIt = std::find_if(orderedMenuList.begin(), orderedMenuList.end(), [menuId](const std::shared_ptr<Orders>& order) {
+        auto orderIt = std::find_if(orderedMenuList.begin(), orderedMenuList.end(),
+                                    [menuId](const std::shared_ptr<Orders>& order) {
             return order->menuItem->id == menuId;
         });
 
