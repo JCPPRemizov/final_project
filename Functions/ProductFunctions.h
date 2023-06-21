@@ -7,6 +7,8 @@
 
 #include <cstdint>
 #include <string>
+#include <thread>
+#include <iostream>
 #include "Product.h"
 
 class ProductFunctions{
@@ -37,7 +39,8 @@ static inline void printProductList(const std::vector<std::shared_ptr<Product>>&
 }
 
 static inline void deleteProduct(const int& productId){
-    Product::productList.erase(std::remove_if(Product::productList.begin(), Product::productList.end(),[productId](const std::shared_ptr<Product> &product) {return product->id == productId;}), Product::productList.end());
+    Product::productList.erase(std::remove_if(Product::productList.begin(), Product::productList.end(),
+                                              [productId](const std::shared_ptr<Product> &product) {return product->id == productId;}), Product::productList.end());
     saveProduct();
 }
 

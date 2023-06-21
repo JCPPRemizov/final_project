@@ -7,6 +7,7 @@
 
 #include "Request.h"
 #include "Warehouse.h"
+#include "RequestFunctions.h"
 
 class ProviderFunctions {
 public:

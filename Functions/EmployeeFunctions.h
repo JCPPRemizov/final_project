@@ -117,7 +117,8 @@ public:
     }
 
     static inline void deleteEmployee(const std::string& login){
-        Employee::staff.erase(std::remove_if( Employee::staff.begin(),  Employee::staff.end(),[login](const std::shared_ptr<Employee> &employee) {return employee->login == login;}),  Employee::staff.end());
+        Employee::staff.erase(std::remove_if( Employee::staff.begin(),  Employee::staff.end(),
+                                              [login](const std::shared_ptr<Employee> &employee) {return employee->login == login;}),  Employee::staff.end());
         saveEmployee();
 
     }
