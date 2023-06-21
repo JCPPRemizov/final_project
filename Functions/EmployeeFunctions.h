@@ -15,7 +15,7 @@
 class EmployeeFunctions {
 public:
     // Функция авторизации
-    static std::shared_ptr<Employee> authorization(const std::string& login, const std::string& password){
+    static inline std::shared_ptr<Employee> authorization(const std::string& login, const std::string& password){
 
         size_t hashedPassword = hash(password); // Хэширование пароля
         std::shared_ptr<Employee> employee;
@@ -30,7 +30,7 @@ public:
     }
 
     // Функция регистрации
-    static void registration(EmployeeType employeeType, const std::string& name, const std::string& surname, const std::string& middle_name,
+    static inline void registration(EmployeeType employeeType, const std::string& name, const std::string& surname, const std::string& middle_name,
                       const std::string& login, const std::string& password){
         size_t hasedPassword = hash(password); // Хэшируем пароль
         auto* employee = new Employee(employeeType, name, surname, middle_name, login, hasedPassword); // Создаем нового сотрудника
@@ -53,7 +53,7 @@ public:
     }
 
     // Функция редактирования сотрудника
-    static void editEmployee(const int& employeeId, const int& employeeType, const std::string& name, const std::string& surname, const std::string& middle_name,
+    static inline void editEmployee(const int& employeeId, const int& employeeType, const std::string& name, const std::string& surname, const std::string& middle_name,
                                     const std::string& login, const std::string& password){
         EmployeeType type;
         std::shared_ptr<Employee> &employee = Employee::staff[employeeId - 1];
@@ -86,7 +86,7 @@ public:
 
     }
 
-    static void addNewEmployee(const int& employeeType, const std::string& name, const std::string& surname, const std::string& middle_name,
+    static inline void addNewEmployee(const int& employeeType, const std::string& name, const std::string& surname, const std::string& middle_name,
                                const std::string& login, const std::string& password){
 
         EmployeeType type;
@@ -113,18 +113,18 @@ public:
         EmployeeFunctions::registration(type, name, surname, middle_name, login, password);
     }
 
-    static void deleteEmployee(const std::string& login){
+    static inline void deleteEmployee(const std::string& login){
         Employee::staff.erase(std::remove_if( Employee::staff.begin(),  Employee::staff.end(),[login](const std::shared_ptr<Employee> &employee) {return employee->login == login;}),  Employee::staff.end());
         saveEmployee();
 
     }
 
-    static void saveEmployee(){
+    static inline void saveEmployee(){
         std::thread saveStaffThread([](){Employee::saveStaffToJson();});
         saveStaffThread.join();
     }
 
-    static void loadEmployee(){
+    static inline void loadEmployee(){
         std::thread loadStaffThread([](){Employee::loadStaffFromJson();});
         loadStaffThread.join();
     }

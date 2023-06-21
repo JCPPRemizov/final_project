@@ -13,7 +13,7 @@
 
 class MenuFunctions{
 public:
-    static void addNewMenuItem(const std::string& name, const std::string& description, const float& gramming, const float& cost, const int& hour, const int& min, const int& sec, const std::vector<std::shared_ptr<Product>>& productList){
+    static inline void addNewMenuItem(const std::string& name, const std::string& description, const float& gramming, const float& cost, const int& hour, const int& min, const int& sec, const std::vector<std::shared_ptr<Product>>& productList){
         std::uint16_t lastId = 1;
         if (!Menu::menuProductList.empty()) {
             lastId = Menu::menuProductList[Menu::menuProductList.size() - 1]->id + 1;
@@ -22,7 +22,7 @@ public:
         saveMenuItems();
     }
 
-    static void editMenuItem(const int& menuId , const std::string& name, const std::string& description, const float& gramming, const float& cost, const int& hour, const int& min, const int& sec, const std::vector<std::shared_ptr<Product>>& productList){
+    static inline void editMenuItem(const int& menuId , const std::string& name, const std::string& description, const float& gramming, const float& cost, const int& hour, const int& min, const int& sec, const std::vector<std::shared_ptr<Product>>& productList){
 
         try {
             auto iterator = std::find_if(Menu::menuProductList.begin(), Menu::menuProductList.end(),
@@ -48,20 +48,20 @@ public:
 
     }
 
-    static void deleteMenuItem(const int& menuId){
+    static inline void deleteMenuItem(const int& menuId){
 
         Menu::menuProductList.erase(std::remove_if(Menu::menuProductList.begin(), Menu::menuProductList.end(),[menuId](const std::shared_ptr<Menu> &menu) {return menu->id == menuId;}), Menu::menuProductList.end());
         saveMenuItems();
 
     }
 
-    static void saveMenuItems(){
+    static inline void saveMenuItems(){
 
         std::thread saveMenuItemsThread([](){Menu::saveMenuItemsToJson();});
         saveMenuItemsThread.join();
     }
 
-    static void loadMenuItems(){
+    static inline void loadMenuItems(){
         std::thread loadMenuItemsThread([](){Menu::loadMenuItemsFromJson();});
         loadMenuItemsThread.join();
     }

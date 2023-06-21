@@ -11,7 +11,7 @@
 
 class ProductFunctions{
 public:
-static void addNewProduct(const std::string& name, const float& cost){
+static inline void addNewProduct(const std::string& name, const float& cost){
     std::uint16_t lastId = 1;
     if (!Product::productList.empty()) {
         lastId = Product::productList[Product::productList.size() - 1]->id + 1;
@@ -21,32 +21,36 @@ static void addNewProduct(const std::string& name, const float& cost){
     saveProduct();
 }
 
-static void editProduct(const std::shared_ptr<Product>& product, const std::string& name, const float& cost){
+static inline void editProduct(const std::shared_ptr<Product>& product, const std::string& name, const float& cost){
     product->name = name;
     product->cost = cost;
 
     saveProduct();
 }
 
-static void printProductList(const std::vector<std::shared_ptr<Product>>& products){
+static inline void printProductList(const std::vector<std::shared_ptr<Product>>& products){
     if (!products.empty()){
         for (const auto& item:products){
             std::cout << "ID: " << item->id << "\n" << "Название: " << item->name << "\n" << "Стоимость: " << item->cost << "\n" << "--------------------------" << std::endl;
         }
     }
 }
-static void deleteProduct(const int& productId){
+
+static inline void deleteProduct(const int& productId){
     Product::productList.erase(std::remove_if(Product::productList.begin(), Product::productList.end(),[productId](const std::shared_ptr<Product> &product) {return product->id == productId;}), Product::productList.end());
     saveProduct();
 }
-static void saveProduct(){
+
+static inline void saveProduct(){
     std::thread saveProducts([](){Product::saveProductsToJson();});
     saveProducts.join();
 }
-static void loadProduct(){
+
+static inline void loadProduct(){
     std::thread loadProducts([](){Product::loadProductsFromJson();});
     loadProducts.join();
 }
+
 };
 
 

@@ -1,7 +1,7 @@
 #include <iostream>
-#include "Pages.h"
+#include "StartPages.h"
 int main() {
     setlocale(LC_ALL, "Russian");
-    Pages::startPage();
+    StartPage::startPage();
     return 0;
 }
