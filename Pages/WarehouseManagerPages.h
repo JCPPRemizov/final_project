@@ -11,19 +11,11 @@ public:
             system(consoleClear.c_str());
             int action;
             std::cout << "Страница складского менеджера" << std::endl;
-            std::cout << "1.Добавить новый запрос\n" << "Выберите действие(Введите 0 для выхода): " << std::endl;
+            std::cout << "1.Добавить новую заявку\n2.Удалить заявку\n3.Просмотр заявок\n" << "Выберите действие(Введите 0 для выхода): " << std::endl;
             std::cin >> action;
 
             if (std::cin.fail()){
                 std::cout << "Ошибка! Неверный ввод!" << std::endl;
-                std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
-                std::cin.clear();
-                std::cin.ignore(10000, '\n');
-                getchar();
-                continue;
-            }
-            if (action > 2 or action < 0){
-                std::cout << "Ошибка! Введите число в диапазоне от 1 до 1!" << std::endl;
                 std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
@@ -36,9 +28,17 @@ public:
 
             if (action == 1){
                 addNewRequestPage();
-            }
-            if(action == 2){
+            } else if (action == 2){
+                deleteRequestPage();
+            } else if(action == 3){
                 requestsPrintPage();
+            } else {
+                std::cout << "Ошибка! Введите число в диапазоне от 1 до 1!" << std::endl;
+                std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                getchar();
+                continue;
             }
 
         }
@@ -68,6 +68,7 @@ public:
             if (productId == 0) {
                 if (!rProductsList.empty()){
                     RequestFunctions::addNewRequest(rProductsList);
+                    RequestFunctions::saveRequestsToJson();
                 }
                 break;
             }
@@ -121,6 +122,45 @@ public:
                 getchar();
                 continue;
             }
+        }
+    }
+
+    static inline void deleteRequestPage(){
+        while (true) {
+            system(consoleClear.c_str());
+            std::shared_ptr<Request> request;
+            int requestId;
+            RequestFunctions::printRequests();
+            std::cout << "Введите ID заявки для удаления(Введите 0 для выхода): " << std::endl;
+            std::cin >> requestId;
+            if (std::cin.fail()) {
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                std::cout << "Ошибка! Введите число!" << std::endl;
+                std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                getchar();
+                continue;
+            }
+            if (requestId == 0) {
+                break;
+            }
+            for (const auto &item: Request::requestsList) {
+                if (requestId == item->id) {
+                    request = item;
+                }
+            }
+            if (request == nullptr) {
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                std::cout << "Такой заявки нету!" << std::endl;
+                std::cout << "Ошибка! Введите число!" << std::endl;
+                std::cout << "Нажмите любую клавишу для продолежения" << std::endl;
+                getchar();
+                continue;
+            }
+
+            RequestFunctions::deleteRequest(requestId);
+
         }
     }
 

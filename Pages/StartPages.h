@@ -72,6 +72,7 @@ public:
     EmployeeFunctions::loadEmployee();
     ProductFunctions::loadProduct();
     MenuFunctions::loadMenuItems();
+    RequestFunctions::loadRequestsFromJson();
     if (!Employee::staff.empty()) {
         for (const auto &item: Employee::staff) {
             if (item->employeeType == EmployeeType(ADMIN)) {
