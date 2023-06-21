@@ -5,8 +5,12 @@
 #ifndef FINAL_PROJECT_STARTPAGES_H
 #define FINAL_PROJECT_STARTPAGES_H
 
+
 #include "AdminPages.h"
 #include "WarehouseManagerPages.h"
+#include "ProviderPages.h"
+#include "AccountatnPages.h"
+#include "GuestPages.h"
 
 class StartPage{
 private:
@@ -62,6 +66,10 @@ public:
             case WAREHOUSE_MANAGER:
                 WarehouseManagerPages::warehousePage();
                 break;
+            case PROVIDER:
+                ProviderPages::providerPage();
+            case ACCOUNTANT:
+                AccountantPages::accountantPages();
         }
         break;
 
@@ -73,6 +81,9 @@ public:
     ProductFunctions::loadProduct();
     MenuFunctions::loadMenuItems();
     RequestFunctions::loadRequestsFromJson();
+    RequestFunctions::loadApprovedRequestsFromJson();
+    Restaurant::loadFromJson();
+    Warehouse::loadRequestsFromJson();
     if (!Employee::staff.empty()) {
         for (const auto &item: Employee::staff) {
             if (item->employeeType == EmployeeType(ADMIN)) {
@@ -134,7 +145,7 @@ public:
                         authorizationPage();
                         break;
                     case 2:
-                        std::cout << "Два" << std::endl;
+                        GuestPages::guestPage();
                         break;
                 }
             }
