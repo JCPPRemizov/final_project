@@ -5,6 +5,7 @@
 #include "RequestFunctions.h"
 #include "Restaurant.h"
 #include "WarehouseFunctions.h"
+#include "AdminPages.h"
 
 class WarehouseManagerPages {
 public:

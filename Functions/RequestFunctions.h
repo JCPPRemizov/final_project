@@ -11,6 +11,7 @@
 #include <iostream>
 #include "Product.h"
 #include "Request.h"
+#include "Employee.h"
 
 class RequestFunctions{
 public:
@@ -60,7 +61,8 @@ public:
     }
 
     static inline void deleteRequest(const int& requestId){
-        Request::requestsList.erase(std::remove_if(Request::requestsList.begin(), Request::requestsList.end(),[requestId](const std::shared_ptr<Request> &request) {return request->id == requestId;}), Request::requestsList.end());
+        Request::requestsList.erase(std::remove_if(Request::requestsList.begin(), Request::requestsList.end(),
+                                                   [requestId](const std::shared_ptr<Request> &request) {return request->id == requestId;}), Request::requestsList.end());
     }
 
     static inline void saveRequestsToJson() {
