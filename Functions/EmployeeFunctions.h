@@ -56,6 +56,7 @@ public:
     static inline void editEmployee(const int& employeeId, const int& employeeType, const std::string& name, const std::string& surname, const std::string& middle_name,
                                     const std::string& login, const std::string& password){
         EmployeeType type;
+        //Изменение типа сотрудника
         std::shared_ptr<Employee> &employee = Employee::staff[employeeId - 1];
         switch (employeeType) {
             case 1:
@@ -76,6 +77,7 @@ public:
             case 6:
                 type = EmployeeType::WAITER;
         }
+        //Изменение сотрудника
         employee->employeeType = type;
         employee->name = name;
         employee->surname = surname;
@@ -86,6 +88,7 @@ public:
 
     }
 
+    //Функция добавления нового пользователя
     static inline void addNewEmployee(const int& employeeType, const std::string& name, const std::string& surname, const std::string& middle_name,
                                const std::string& login, const std::string& password){
 
